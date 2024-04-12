@@ -1,31 +1,44 @@
+
 import { useState, ChangeEvent, FormEvent } from 'react'
+// db
 import { category } from '../db/category.ts'
+// llamada de tipado del objeto activity
 import { Activity } from '../types/types.ts'
 function Form() {
+
+    // creamos el usestate de la actividad es un objeto por lo tanto lo representamos como tal 
+    ///y llamamos el typado y lo nombramos en el usestate
     const [activity, setActivity] = useState<Activity>({
         category: '',
         name: '',
         calories: 0,
     })
 
+    // hacemos un onchange como call back para rellenar el formulario con el usestate 
+    // como norma generar llamariamos por defecto un parametro "e" pero aqui siendo typescrit debemos tiparlo
+    //  debemos tiparlo con la entradas que aparecen
+    //ChangeEvent<HTMLSelectElement> esta es para un input select
+    //ChangeEvent<HTMLInputElement> este para un input normal
+    //en este caso typamos que la entrada sera tanto de tipo HTMLSelectElement O HTMLInputElement
 
-    const handleChangeFormActivity = (e: React.ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
+    const handleChangeFormActivity = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
+
         const isNumber = 'calories'.includes(e.target.id)
-        console.log(isNumber)
+
         setActivity({
             ...activity,
             [e.target.id]: isNumber ? +e.target.value : e.target.value
 
         })
     }
-
+    // hacemops una validacion del formulario si esta vacio los input que no pase
     const isValidateActivity = () => {
         const { name, calories, category } = activity
         return name.trim() !== "" && calories > 0 && category.trim() !== ""
     }
 
     const handlesubmit = (e: FormEvent<HTMLFormElement>) => {
-
+        e.preventDefault()
     }
     return (
         <form
