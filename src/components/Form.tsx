@@ -1,18 +1,34 @@
 
-import { useState, ChangeEvent, FormEvent } from 'react'
+import { useState, ChangeEvent, FormEvent, Dispatch } from 'react'
 // db
 import { category } from '../db/category.ts'
 // llamada de tipado del objeto activity
 import { Activity } from '../types/types.ts'
-function Form() {
+import { ActivityActions } from '../reducers/activityReducer.ts'
 
-    // creamos el usestate de la actividad es un objeto por lo tanto lo representamos como tal 
-    ///y llamamos el typado y lo nombramos en el usestate
-    const [activity, setActivity] = useState<Activity>({
+import { v4 as uuidv4 } from 'uuid'
+
+// la props de dispatch esta conectada de manera indirecta con usereducer 
+//pero tenemos que dseclarar que este dispatch es del tipo Dispatch de react y le debemos de declarar el tipado
+//que el tipado es el que esta en use reducer
+type FormProps = {
+    dispatch: Dispatch<ActivityActions>
+}
+
+// le pasamos como prop dispatch que es el que conectara el formulario con use reducer pasandole la info deseada
+function Form({ dispatch }: FormProps) {
+
+
+
+    const initialState: Activity = ({
+        id: '',
         category: '',
         name: '',
         calories: 0,
     })
+    // creamos el usestate de la actividad es un objeto por lo tanto lo representamos como tal 
+    ///y llamamos el typado y lo nombramos en el usestate
+    const [activity, setActivity] = useState<Activity>(initialState)
 
     // hacemos un onchange como call back para rellenar el formulario con el usestate 
     // como norma generar llamariamos por defecto un parametro "e" pero aqui siendo typescrit debemos tiparlo
@@ -37,8 +53,21 @@ function Form() {
         return name.trim() !== "" && calories > 0 && category.trim() !== ""
     }
 
+    // esta funcion es la que creamos para usar al pulsar el boton de enviar del formulario
     const handlesubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        // al pulsar el boton  le pasamos por el  dispatch  el type y payload 
+        //en el payload le pasamos como argumento una newActivity que le damos el valor de activity
+        //activity es el objeto creado del formulario
+        dispatch({
+            type: 'save-activity',
+            payload: { newActivity: activity }
+        })
+        setActivity({
+
+            ...initialState,
+            id: uuidv4()
+        })
     }
     return (
         <form
