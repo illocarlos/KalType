@@ -3,6 +3,7 @@ import { useReducer } from "react"
 // nos traemos los dos componententes de usereducer que usaremos para la sintasis de este 
 import { activityReducer, initialState } from "./reducers/activityReducer"
 import Form from "./components/Form"
+import ActivityList from './components/ActivityList.tsx'
 
 function App() {
   // lo llamamos esta es la manera de llamrlo  state y dispatch son palabras reservadas de react
@@ -13,6 +14,7 @@ function App() {
   //es decir en relacion a una funcion pasandola como prop esta seria la manera de llamar 
   //dispatch le mandamos la informacion que deseamos 
   const [state, dispatch] = useReducer(activityReducer, initialState)
+
   return (
     <>
       <header className=" bg-sky-700 py-3">
@@ -28,6 +30,12 @@ function App() {
               dispatch={dispatch}
             />
           </div>
+        </section>
+        <section className="p-10 mx-auto maw-w-4xl">
+          <ActivityList
+            dispatch={dispatch}
+            activity={state.activities}
+          />
         </section>
       </main>
     </>

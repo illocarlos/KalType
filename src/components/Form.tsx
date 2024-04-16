@@ -59,15 +59,15 @@ function Form({ dispatch }: FormProps) {
         // al pulsar el boton  le pasamos por el  dispatch  el type y payload 
         //en el payload le pasamos como argumento una newActivity que le damos el valor de activity
         //activity es el objeto creado del formulario
+        const newActivity = {
+            ...activity,
+            id: uuidv4()
+        };
         dispatch({
             type: 'save-activity',
-            payload: { newActivity: activity }
-        })
-        setActivity({
-
-            ...initialState,
-            id: uuidv4()
-        })
+            payload: { newActivity }
+        });
+        setActivity(initialState);
     }
     return (
         <form

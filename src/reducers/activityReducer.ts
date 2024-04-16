@@ -9,20 +9,19 @@ import { Activity } from "../types/types"
 //--> ese payload va con dos parametros estos que aparecen 
 //--> y traemos el payload una nueva actividad que tipamos como activity ya que vendra con los mismos valores que el tipado
 //este tipado esta conectado con las props de form
-export type ActivityActions = {
-    type: 'save-activity',
-    payload: { newActivity: Activity },
-
-}
-
+export type ActivityActions =
+    { type: 'save-activity', payload: { newActivity: Activity } } |
+    { type: 'edit-activity', payload: { id: Activity['id'] } }
 
 
 type ActivityState = {
-    activities: Activity[]
+    activities: Activity[],
+    actiId: Activity['id']
 }
 
 export const initialState: ActivityState = {
-    activities: []
+    activities: [],
+    actiId: ''
 }
 
 
@@ -38,6 +37,14 @@ export const activityReducer = (
         return {
             ...state,
             activities: [...state.activities, action.payload.newActivity],
+        }
+    }
+    //este codigo maneja la logica para actualizar el state
+    if (action.type === 'edit-activity') {
+
+        return {
+            ...state,
+            actiId: action.payload.id
         }
     }
     return state
