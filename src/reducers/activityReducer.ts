@@ -11,16 +11,22 @@ import { Activity } from "../types/types"
 //este tipado esta conectado con las props de form
 export type ActivityActions =
     { type: 'save-activity', payload: { newActivity: Activity } } |
-    { type: 'edit-activity', payload: { id: Activity['id'] } }
+    { type: 'edit-activity', payload: { id: Activity['id'] } } |
+    { type: 'deleted-activity', payload: { id: Activity['id'] } }
 
 
-type ActivityState = {
+export type ActivityState = {
     activities: Activity[],
     actiId: Activity['id']
 }
 
+const localStorageActivities = (): Activity[] => {
+    const activities = localStorage.getItem('activities')
+    return activities ? JSON.parse(activities) : []
+}
+
 export const initialState: ActivityState = {
-    activities: [],
+    activities: localStorageActivities(),
     actiId: ''
 }
 
@@ -34,11 +40,24 @@ export const activityReducer = (
     //este codigo maneja la logica para actualizar el state
     if (action.type === 'save-activity') {
 
+        let updateActivity: Activity[] = []
+
+        if (state.actiId) {
+            updateActivity = state.activities.map(eachActy => eachActy.id === state.actiId ? action.payload.newActivity : eachActy)
+        } else {
+            updateActivity = [...state.activities, action.payload.newActivity]
+
+        }
+
         return {
             ...state,
-            activities: [...state.activities, action.payload.newActivity],
+            activities: updateActivity,
+            actiId: ''
         }
     }
+
+
+
     //este codigo maneja la logica para actualizar el state
     if (action.type === 'edit-activity') {
 
@@ -47,5 +66,17 @@ export const activityReducer = (
             actiId: action.payload.id
         }
     }
+
+    //este codigo maneja la logica para actualizar el state
+    if (action.type === 'deleted-activity') {
+
+        return {
+            ...state,
+            activities: state.activities.filter(eachActivity => eachActivity.id !== action.payload.id)
+
+        }
+    }
+
+
     return state
 }

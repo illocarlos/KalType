@@ -1,5 +1,5 @@
 // nos llevamos al app use reducer pero deberiamos llevarnos este hook a donde quisieramos usar ese reducer
-import { useReducer } from "react"
+import { useEffect, useReducer } from "react"
 // nos traemos los dos componententes de usereducer que usaremos para la sintasis de este 
 import { activityReducer, initialState } from "./reducers/activityReducer"
 import Form from "./components/Form"
@@ -15,6 +15,10 @@ function App() {
   //dispatch le mandamos la informacion que deseamos 
   const [state, dispatch] = useReducer(activityReducer, initialState)
 
+
+  useEffect(() => {
+    localStorage.setItem('activities', JSON.stringify(state.activities))
+  }, [state.activities])
   return (
     <>
       <header className=" bg-sky-700 py-3">
@@ -28,6 +32,7 @@ function App() {
             {/* pasamos como props  dispatch para recibur un informacion */}
             <Form
               dispatch={dispatch}
+              state={state}
             />
           </div>
         </section>

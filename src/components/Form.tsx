@@ -1,10 +1,10 @@
 
-import { useState, ChangeEvent, FormEvent, Dispatch } from 'react'
+import { useState, ChangeEvent, FormEvent, Dispatch, useEffect } from 'react'
 // db
 import { category } from '../db/category.ts'
 // llamada de tipado del objeto activity
 import { Activity } from '../types/types.ts'
-import { ActivityActions } from '../reducers/activityReducer.ts'
+import { ActivityActions, ActivityState } from '../reducers/activityReducer.ts'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -12,11 +12,12 @@ import { v4 as uuidv4 } from 'uuid'
 //pero tenemos que dseclarar que este dispatch es del tipo Dispatch de react y le debemos de declarar el tipado
 //que el tipado es el que esta en use reducer
 type FormProps = {
-    dispatch: Dispatch<ActivityActions>
+    dispatch: Dispatch<ActivityActions>,
+    state: ActivityState
 }
 
 // le pasamos como prop dispatch que es el que conectara el formulario con use reducer pasandole la info deseada
-function Form({ dispatch }: FormProps) {
+function Form({ dispatch, state }: FormProps) {
 
 
 
@@ -26,9 +27,19 @@ function Form({ dispatch }: FormProps) {
         name: '',
         calories: 0,
     })
+
     // creamos el usestate de la actividad es un objeto por lo tanto lo representamos como tal 
     ///y llamamos el typado y lo nombramos en el usestate
     const [activity, setActivity] = useState<Activity>(initialState)
+
+    useEffect(() => {
+        if (state.actiId) {
+            const selectActivity = state.activities.filter(eachActivity => eachActivity.id === state.actiId)[0]
+            setActivity(selectActivity)
+        }
+    }, [state.actiId])
+
+
 
     // hacemos un onchange como call back para rellenar el formulario con el usestate 
     // como norma generar llamariamos por defecto un parametro "e" pero aqui siendo typescrit debemos tiparlo
