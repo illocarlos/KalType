@@ -12,7 +12,9 @@ import { Activity } from "../types/types"
 export type ActivityActions =
     { type: 'save-activity', payload: { newActivity: Activity } } |
     { type: 'edit-activity', payload: { id: Activity['id'] } } |
-    { type: 'deleted-activity', payload: { id: Activity['id'] } }
+    { type: 'deleted-activity', payload: { id: Activity['id'] } } |
+    { type: 'remove-all' }
+
 
 
 export type ActivityState = {
@@ -73,6 +75,16 @@ export const activityReducer = (
         return {
             ...state,
             activities: state.activities.filter(eachActivity => eachActivity.id !== action.payload.id)
+
+        }
+    }
+
+    //este codigo maneja la logica para actualizar el state
+    if (action.type === 'remove-all') {
+
+        return {
+            activities: [],
+            actiId: ''
 
         }
     }

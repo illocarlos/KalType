@@ -12,6 +12,7 @@ const ActivityList = ({ activity, dispatch }: ActivityListProp) => {
 
     return (
         <>
+
             <h1 className=" text-center text-4xl font-bold text-slate-600">food and activity</h1>
 
             {activity.length === 0 ? (

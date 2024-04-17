@@ -1,10 +1,10 @@
 // nos llevamos al app use reducer pero deberiamos llevarnos este hook a donde quisieramos usar ese reducer
-import { useEffect, useReducer } from "react"
+import { useEffect, useMemo, useReducer } from "react"
 // nos traemos los dos componententes de usereducer que usaremos para la sintasis de este 
 import { activityReducer, initialState } from "./reducers/activityReducer"
 import Form from "./components/Form"
 import ActivityList from './components/ActivityList.tsx'
-
+import CaloriesTracker from "./components/CaloriesTracker.tsx"
 function App() {
   // lo llamamos esta es la manera de llamrlo  state y dispatch son palabras reservadas de react
   //y en reducer como argumentos le pasamos las funciones que traeremos
@@ -19,11 +19,19 @@ function App() {
   useEffect(() => {
     localStorage.setItem('activities', JSON.stringify(state.activities))
   }, [state.activities])
+
+
+  const canRest = () => useMemo(() => state.activities.length, [state.activities])
   return (
     <>
       <header className=" bg-sky-700 py-3">
-        <div className="max-w-4xl mx-auto flex justify-between">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
           <h1 className="text-center text-lg font-bold text-white uppercase"> calories acount</h1>
+          <button
+            className=" rounded-xl bg-white px-3 border-none font-extrabold hover:bg-slate-900 hover:text-white transition-all ease-linear disabled:opacity-5 disabled:hover:bg-white disabled:hover:text-black"
+            disabled={!canRest()}
+            onClick={() => dispatch({ type: 'remove-all' })}
+          >reset app</button>
         </div>
       </header>
       <main>
@@ -33,6 +41,13 @@ function App() {
             <Form
               dispatch={dispatch}
               state={state}
+            />
+          </div>
+        </section>
+        <section className=" bg-purple-800 py-10">
+          <div className="max-w-4xl mx-auto">
+            <CaloriesTracker
+              activity={state.activities}
             />
           </div>
         </section>
