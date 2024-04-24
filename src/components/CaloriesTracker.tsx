@@ -13,11 +13,11 @@ import { useActivity } from "../hooks/useActivity"
 function caloriesTracker() {
     const { state } = useActivity()
 
-    const caloriesConsumed = useMemo(() => state.activities.reduce((total, activiti) => activiti.category === 'food' ? total + activiti.calories : total, 0),
+    const caloriesConsumed: number = useMemo(() => state.activities.reduce((total, activiti) => activiti.category === 'food' ? total + activiti.calories : total, 0),
         [state.activities])
-    const removeCalories = useMemo(() => state.activities.reduce((total, activiti) => activiti.category === 'sport' ? total + activiti.calories : total, 0),
+    const removeCalories: number = useMemo(() => state.activities.reduce((total, activiti) => activiti.category === 'sport' ? total + activiti.calories : total, 0),
         [state.activities])
-    const totaCalories = useMemo(() => caloriesConsumed - removeCalories, [state.activities])
+    const totaCalories: number = useMemo(() => caloriesConsumed - removeCalories, [state.activities])
 
     return (
         <>

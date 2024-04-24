@@ -1,5 +1,5 @@
 
-import { useState, ChangeEvent, FormEvent, Dispatch, useEffect } from 'react'
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react'
 // db
 import { category } from '../db/category.ts'
 // llamada de tipado del objeto activity
