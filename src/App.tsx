@@ -1,7 +1,8 @@
 // nos llevamos al app use reducer pero deberiamos llevarnos este hook a donde quisieramos usar ese reducer
-import { useEffect, useMemo, useReducer } from "react"
+import { useEffect, useMemo } from "react"
 // nos traemos los dos componententes de usereducer que usaremos para la sintasis de este 
-import { activityReducer, initialState } from "./reducers/activityReducer"
+// import { activityReducer, initialState } from "./reducers/activityReducer"
+import { useActivity } from "./hooks/useActivity.ts"
 import Form from "./components/Form"
 import ActivityList from './components/ActivityList.tsx'
 import CaloriesTracker from "./components/CaloriesTracker.tsx"
@@ -13,15 +14,17 @@ function App() {
   //le mandamos el dispatch a form que es el que mandara la informacion que queremos incluir en reducer
   //es decir en relacion a una funcion pasandola como prop esta seria la manera de llamar 
   //dispatch le mandamos la informacion que deseamos 
-  const [state, dispatch] = useReducer(activityReducer, initialState)
+  // const [state, dispatch] = useReducer(activityReducer, initialState)
 
+
+  const { state, dispatch } = useActivity()
 
   useEffect(() => {
     localStorage.setItem('activities', JSON.stringify(state.activities))
   }, [state.activities])
 
-
   const canRest = () => useMemo(() => state.activities.length, [state.activities])
+
   return (
     <>
       <header className=" bg-sky-700 py-3">
@@ -38,24 +41,16 @@ function App() {
         <section className="bg-sky-400 py-20 px-5">
           <div className="max-w-4xl mx-auto">
             {/* pasamos como props  dispatch para recibur un informacion */}
-            <Form
-              dispatch={dispatch}
-              state={state}
-            />
+            <Form />
           </div>
         </section>
         <section className=" bg-purple-800 py-10">
           <div className="max-w-4xl mx-auto">
-            <CaloriesTracker
-              activity={state.activities}
-            />
+            <CaloriesTracker />
           </div>
         </section>
         <section className="p-10 mx-auto maw-w-4xl">
-          <ActivityList
-            dispatch={dispatch}
-            activity={state.activities}
-          />
+          <ActivityList />
         </section>
       </main>
     </>

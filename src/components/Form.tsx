@@ -4,23 +4,26 @@ import { useState, ChangeEvent, FormEvent, Dispatch, useEffect } from 'react'
 import { category } from '../db/category.ts'
 // llamada de tipado del objeto activity
 import { Activity } from '../types/types.ts'
-import { ActivityActions, ActivityState } from '../reducers/activityReducer.ts'
+// import { ActivityActions, ActivityState } from '../reducers/activityReducer.ts'
 
 import { v4 as uuidv4 } from 'uuid'
+import { useActivity } from '../hooks/useActivity.ts'
 
 // la props de dispatch esta conectada de manera indirecta con usereducer 
 //pero tenemos que dseclarar que este dispatch es del tipo Dispatch de react y le debemos de declarar el tipado
 //que el tipado es el que esta en use reducer
-type FormProps = {
-    dispatch: Dispatch<ActivityActions>,
-    state: ActivityState
-}
+// type FormProps = {
+//     dispatch: Dispatch<ActivityActions>,
+//     state: ActivityState
+// }
 
 // le pasamos como prop dispatch que es el que conectara el formulario con use reducer pasandole la info deseada
-function Form({ dispatch, state }: FormProps) {
+// { dispatch, state }: FormProps esto va dentro
+function Form() {
 
 
 
+    const { state, dispatch } = useActivity()
     const initialState: Activity = ({
         id: '',
         category: '',
